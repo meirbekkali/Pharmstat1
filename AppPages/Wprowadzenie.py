@@ -32,8 +32,8 @@ def show(language_display: str) -> None:
         f"• {t['control_charts']}  \n"
         f"• {t['process_capability']}  \n"
         f"• {t['stability_regression']}  \n"
-        f"• {t['histogram_analysis']}  \n"
-        f"• {t['boxplot_charts']}  \n"
-        f"• {t['pqr_module']}  \n"
-        f"• {t['temp_humidity_analysis']}"
+       # f"• {t['histogram_analysis']}  \n"
+        #f"• {t['boxplot_charts']}  \n"
+        #f"• {t['pqr_module']}  \n"
+        #f"• {t['temp_humidity_analysis']}"
     )
