@@ -27,7 +27,7 @@ from AppPages import stability_analysis
 #from AppPages import histogram_analysis
 #from AppPages import BoxPlot
 #from AppPages import statistical_analysis
-from AppPages import pqr
+#from AppPages import pqr
 # при наличии:
 # from AppPages import pqr
 # from AppPages import Analiza_temperatury_wilgotnosci
@@ -41,7 +41,7 @@ routes = {
     t_general["stability_regression"]:              lambda: stability_analysis.show(language_display),
     #t_general["histogram_analysis"]:                lambda: histogram_analysis.show(language_display),
     #t_general["boxplot_charts"]:                    lambda: BoxPlot.show(language_display),
-    t_general["pqr_module"]:                        lambda: pqr.show(language_display),
+    #t_general["pqr_module"]:                        lambda: pqr.show(language_display),
     # опциональные:
     # t_general["temp_humidity_analysis"]:    lambda: Analiza_temperatury_wilgotnosci.show(language_display),
 
