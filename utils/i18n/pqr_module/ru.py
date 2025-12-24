@@ -21,7 +21,7 @@ TRANSLATIONS = {
             "no_file_uploaded": "Файл не загружен"
         },
         "chart_labels": {
-            "time_series": "Идентификатор серии",
+            "time_series": "Номер серии",
             "values": "Значения",
             "observation": "Наблюдение",
             "individual_values": "Индивидуальные значения",
@@ -31,7 +31,7 @@ TRANSLATIONS = {
             "control_chart_with_spec_limits": "Контрольная карта с пределами спецификации"
         },
         "subheaders": {
-            "imr_chart": "Контрольная карта ImR",
+            "imr_chart": "Контрольная карта Щухарта",
             "cpk_analysis": "Анализ способности процесса Cpk",
             "spec_limits_comparison": "Сравнение результатов с пределами спецификации"
         },

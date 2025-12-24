@@ -33,7 +33,7 @@ def show(language_display: str) -> None:
         return
 
     try:
-        df = pd.read_excel(uploaded_file)
+        df = pd.read_excel(uploaded_file).convert_dtypes()
 
         # Предпросмотр
         show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
@@ -55,11 +55,12 @@ def show(language_display: str) -> None:
             st.warning(t.get("warnings_no_columns", "No columns selected."))
             return
 
-        # Отфильтруем нечисловое при расчётах (сохранив порядок)
-        numeric_selected = [c for c in selected_columns if pd.api.types.is_numeric_dtype(df[c])]
-        if not numeric_selected:
+        cleaned = df[selected_columns].apply(pd.to_numeric, errors="coerce")
+        cleaned = cleaned.loc[:, cleaned.notna().any()]
+        if cleaned.empty:
             st.error(t.get("error_no_numeric_in_selection", "Selected columns contain no numeric data."))
             return
+        numeric_selected = list(cleaned.columns)
 
         # Параметры расчётов
         st.markdown("---")
@@ -75,7 +76,7 @@ def show(language_display: str) -> None:
 
         # Базовая описательная статистика
         st.subheader(t["title"])
-        base_stats = calculate_descriptive_stats(df[numeric_selected])
+        base_stats = calculate_descriptive_stats(cleaned[numeric_selected])
         # Приводим к единому формату индекса (строки-метрики)
         base_stats = base_stats.copy()
 
@@ -87,7 +88,7 @@ def show(language_display: str) -> None:
         }
 
         for col in numeric_selected:
-            series = df[col].dropna()
+            series = cleaned[col].dropna()
             # безопасные вычисления — пустые/константные выборки пропускаем
             if len(series) < 3 or series.nunique(dropna=True) < 2:
                 # NaN/прочерк для невозможных расчётов

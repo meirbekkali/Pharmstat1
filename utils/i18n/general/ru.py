@@ -10,7 +10,7 @@ general  = {
     "stability_regression": "Стабильность и регрессия",
     "histogram_analysis": "Гистограммы",
     "boxplot_charts": "Ящиковые диаграммы",
-    "pqr_module": "Годовой отчет (PQR)",
+    "pqr_module": "Модуль PQR2",
     "temp_humidity_analysis": "Анализ температуры и влажности",
 
     # содержимое страницы введения

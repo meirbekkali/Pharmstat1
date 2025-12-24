@@ -56,6 +56,22 @@ def _apply_imr_xticks(fig, series_labels):
             axes[1].set_xticklabels([str(i) for i in bottom_positions])
 
 
+def _set_imr_gap(fig, gap_px=15):
+    """Add a vertical gap (in pixels) between the two ImR subplots."""
+    axes = fig.get_axes()
+    if len(axes) < 2:
+        return
+
+    height_px = fig.get_size_inches()[1] * fig.dpi
+    axis_height_norm = axes[0].get_position().height
+    if height_px <= 0 or axis_height_norm <= 0:
+        return
+
+    desired_gap_norm = gap_px / height_px
+    hspace = desired_gap_norm / axis_height_norm
+    fig.subplots_adjust(hspace=hspace)
+
+
 def show(language):
     t = translations[language]["pqr_module"]
 
@@ -124,20 +140,20 @@ def show(language):
         if content:
             st.markdown(content, unsafe_allow_html=True)
 
-        # Data preview
-        show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
-        if show_data:
-            st.subheader(t["file_handling"]["data_preview"])
-            subset = df[[t["chart_labels"]["time_series"], t["chart_labels"]["values"]]].reset_index(drop=True)
-            st.dataframe(subset, use_container_width=True)
-
-        # Prepare data
+        # Prepare data before preview to avoid Arrow conversion issues
         df[t["chart_labels"]["time_series"]] = df[t["chart_labels"]["time_series"]].astype(str)
         df[t["chart_labels"]["values"]] = pd.to_numeric(df[t["chart_labels"]["values"]], errors='coerce')
         df.dropna(subset=[t["chart_labels"]["values"]], inplace=True)
         if df.empty:
             st.error(t["file_handling"]["error_no_numeric_data"])
             return
+
+        # Data preview
+        show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
+        if show_data:
+            st.subheader(t["file_handling"]["data_preview"])
+            subset = df[[t["chart_labels"]["time_series"], t["chart_labels"]["values"]]].reset_index(drop=True)
+            st.dataframe(subset, use_container_width=True)
 
         data_array = df[t["chart_labels"]["values"]].to_numpy().reshape(-1, 1)
         series_ids = df[t["chart_labels"]["time_series"]].to_list()
@@ -155,6 +171,7 @@ def show(language):
         chart.plot()
         fig_imr = plt.gcf()
         _apply_imr_xticks(fig_imr, series_ids)
+        _set_imr_gap(fig_imr, gap_px=15)
         st.pyplot(fig_imr)
 
         # ====== Cpk + histogram ======

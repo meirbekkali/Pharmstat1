@@ -61,16 +61,16 @@ def show(language_display: str) -> None:
         # Копируем выбранную колонку в унифицированное имя
         df[t["chart_labels"]["values"]] = df[result_column]
 
+        # Приведение типов до предпросмотра
+        df[t["chart_labels"]["time_series"]] = df[t["chart_labels"]["time_series"]].astype(str)
+        df[t["chart_labels"]["values"]] = pd.to_numeric(df[t["chart_labels"]["values"]], errors="coerce")
+        df.dropna(subset=[t["chart_labels"]["values"]], inplace=True)
+
         # Предпросмотр
         show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
         if show_data:
             st.subheader(t["file_handling"]["data_preview"])
             st.dataframe(df[[t["chart_labels"]["time_series"], t["chart_labels"]["values"]]].head(10))
-
-        # Приведение типов
-        df[t["chart_labels"]["time_series"]] = df[t["chart_labels"]["time_series"]].astype(str)
-        df[t["chart_labels"]["values"]] = pd.to_numeric(df[t["chart_labels"]["values"]], errors="coerce")
-        df.dropna(subset=[t["chart_labels"]["values"]], inplace=True)
 
         if df.empty:
             st.error(t["file_handling"]["error_no_numeric_data"])

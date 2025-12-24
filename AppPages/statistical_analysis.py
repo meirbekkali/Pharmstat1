@@ -40,7 +40,13 @@ def show(language: str):
     if not uploaded_file:
         return
 
-    df = pd.read_excel(uploaded_file)
+    df = pd.read_excel(uploaded_file).convert_dtypes()
+    df = df.apply(pd.to_numeric, errors="coerce")
+    df.dropna(axis=1, how="all", inplace=True)
+    df.dropna(how="all", inplace=True)
+    if df.empty:
+        st.error("No analyzable data after cleaning.")
+        return
 
     # ===== Dane źródłowe / Source data / Исходные данные =====
     st.markdown('<div class="report-block">', unsafe_allow_html=True)

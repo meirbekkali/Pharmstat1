@@ -44,6 +44,9 @@ def show(language_display: str) -> None:
 
         df["time"] = pd.to_datetime(df["time"], errors="coerce")
         df.dropna(subset=["time"], inplace=True)
+        df["temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
+        df["humidity"] = pd.to_numeric(df["humidity"], errors="coerce")
+        df.dropna(subset=["temperature", "humidity"], how="any", inplace=True)
 
         # Превью данных
         st.subheader(t["file_handling"]["data_preview"])

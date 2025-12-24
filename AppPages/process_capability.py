@@ -28,7 +28,10 @@ def show(language):
 
             selected_column = st.selectbox(t["file_handling"]["select_column"], columns)
 
-            data = df[selected_column].dropna()
+            data = pd.to_numeric(df[selected_column], errors="coerce").dropna()
+            if data.empty:
+                st.error(t["file_handling"].get("error_no_numeric_data", "No numeric data in selected column."))
+                return
 
             show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
             if show_data:

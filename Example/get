@@ -1,0 +1,18 @@
+# Prod
+$base = "https://<MY_URL>/SantoDrugTestResults"
+$clientId = "<My_ID>"
+$clientSecret = "<ClientSecret>"
+$scope = "<Scope>"
+$subkey = "<Subkey>"
+
+# Фильтр по tnn и fakt
+$filter = "tnn eq '52000000055' and fakt eq '98,3'"
+$uri = "$base`?filter=$([uri]::EscapeDataString($filter))"
+
+$headers = @{
+    "ClientId"      = $clientId
+    "ClientSecret"  = $clientSecret
+    "Scope"         = $scope
+    "Ocp-Apim-Subscription-Key" = $subkey
+}
+Invoke-WebRequest -Uri $uri -Headers $headers -Method GET | Select-Object -ExpandProperty Content

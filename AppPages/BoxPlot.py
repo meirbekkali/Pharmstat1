@@ -34,7 +34,7 @@ def show(language_display: str) -> None:
         return
 
     try:
-        df = pd.read_excel(uploaded_file)
+        df = pd.read_excel(uploaded_file).convert_dtypes()
 
         st.write(f"**{t['file_handling']['data_preview']}**")
         st.dataframe(df.head())
@@ -51,10 +51,16 @@ def show(language_display: str) -> None:
             st.warning(t.get("warnings_no_columns", "No columns selected."))
             return
 
+        cleaned = df[selected_columns].apply(pd.to_numeric, errors="coerce")
+        cleaned.dropna(how="all", inplace=True)
+        if cleaned.empty:
+            st.error(t.get("error_no_numeric_in_selection", "Selected columns contain no numeric data."))
+            return
+
         # --- Построение BoxPlot ---
         st.subheader(t["title"])
         fig, ax = plt.subplots(figsize=(10, 6))
-        df[selected_columns].boxplot(ax=ax)
+        cleaned.boxplot(ax=ax)
         ax.set_title(t["plot"]["title"])
         ax.set_ylabel(t["plot"]["y_label"])
         ax.grid(True)
@@ -62,7 +68,7 @@ def show(language_display: str) -> None:
 
         # --- Статистика описательная ---
         st.subheader(t["statistics"]["title"])
-        stats = calculate_descriptive_stats(df[selected_columns])
+        stats = calculate_descriptive_stats(cleaned)
         st.dataframe(stats)
 
     except Exception as e:

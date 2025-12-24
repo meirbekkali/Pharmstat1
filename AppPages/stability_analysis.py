@@ -33,10 +33,18 @@ def show(language):
             df = pd.read_excel(uploaded_file)
 
             parameter_name = df.iloc[0, 0]
-            time = df["Time"]
-            min_spec = df["Min"].iloc[0] if not pd.isna(df["Min"].iloc[0]) else None
-            max_spec = df["Max"].iloc[0] if not pd.isna(df["Max"].iloc[0]) else None
+            min_spec_raw = pd.to_numeric(df["Min"], errors="coerce")
+            max_spec_raw = pd.to_numeric(df["Max"], errors="coerce")
+            min_spec = min_spec_raw.iloc[0] if not pd.isna(min_spec_raw.iloc[0]) else None
+            max_spec = max_spec_raw.iloc[0] if not pd.isna(max_spec_raw.iloc[0]) else None
+
+            df["Time"] = pd.to_numeric(df["Time"], errors="coerce")
             series_columns = df.columns[4:]
+            for col in series_columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
+
+            df.dropna(subset=["Time"], inplace=True)
+            time = df["Time"]
 
             show_data = st.checkbox(t["file_handling"]["show_data_preview"], value=True)
             if show_data:

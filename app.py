@@ -24,8 +24,8 @@ from AppPages import descriptive_statistics
 from AppPages import control_charts
 from AppPages import process_capability
 from AppPages import stability_analysis
-from AppPages import histogram_analysis
-from AppPages import BoxPlot
+#from AppPages import histogram_analysis
+#from AppPages import BoxPlot
 #from AppPages import statistical_analysis
 from AppPages import pqr
 # при наличии:
@@ -39,8 +39,8 @@ routes = {
     t_general["control_charts"]:                    lambda: control_charts.show(language_display),
     t_general["process_capability"]:                lambda: process_capability.show(language_display),
     t_general["stability_regression"]:              lambda: stability_analysis.show(language_display),
-    t_general["histogram_analysis"]:                lambda: histogram_analysis.show(language_display),
-    t_general["boxplot_charts"]:                    lambda: BoxPlot.show(language_display),
+    #t_general["histogram_analysis"]:                lambda: histogram_analysis.show(language_display),
+    #t_general["boxplot_charts"]:                    lambda: BoxPlot.show(language_display),
     t_general["pqr_module"]:                        lambda: pqr.show(language_display),
     # опциональные:
     # t_general["temp_humidity_analysis"]:    lambda: Analiza_temperatury_wilgotnosci.show(language_display),
